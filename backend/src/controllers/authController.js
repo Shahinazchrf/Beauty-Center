@@ -1,3 +1,4 @@
+// backend/src/controllers/authController.js
 const User = require('../models/User');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
@@ -15,6 +16,7 @@ const generateToken = (id, role) => {
 // @route POST/api/auth/register
 // @access Public
 const register = async (req, res) => {
+    console.log("📝 REGISTRATION REQUEST:", req.body);
     try {
         const { fullName, username, email, password, confirmPassword } = req.body;
 
@@ -38,13 +40,19 @@ const register = async (req, res) => {
             });
         }
 
-        // Create user
+        // 🔥 HASH THE PASSWORD HERE (in the controller)
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(password, salt);
+
+        // Create user with hashed password
         const user = await User.create({
             fullName,
             username: username.toLowerCase(),
             email: email.toLowerCase(),
-            password,
+            password: hashedPassword, // This is already hashed!
         });
+
+        console.log("✅ User created:", user._id);
 
         // Generate token
         const token = generateToken(user._id, user.role);
@@ -75,7 +83,7 @@ const register = async (req, res) => {
 // @route POST/api/auth/login
 // @access Public
 const login = async (req, res) => {
-    console.log("📩 LOGIN REQUEST RECEIVED:", req.body);
+    console.log("📩 LOGIN REQUEST:", req.body);
     try {
         const { identifier, password } = req.body;
         

@@ -1,22 +1,14 @@
-const Service = require('../models/Service'); // You'd need to create a Service model too
+const Service = require('../models/Service');
 
-// @desc    Get all services
+// @desc    Get all active services
 // @route   GET /api/services
 // @access  Public
 const getServices = async (req, res) => {
     try {
-        // Find all services in the database
-        const services = await Service.find({});
-        res.status(200).json({
-            success: true,
-            count: services.length,
-            data: services
-        });
+        const services = await Service.find({ isActive: true });
+        res.status(200).json({ success: true, data: services });
     } catch (error) {
-        res.status(500).json({
-            success: false,
-            message: error.message
-        });
+        res.status(500).json({ success: false, message: error.message });
     }
 };
 

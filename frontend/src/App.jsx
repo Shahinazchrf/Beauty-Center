@@ -3,6 +3,8 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import Login from './components/Login';
 import Register from './components/Register';
 import Services from './components/Services'; 
+import Appointments from './components/Appointments'; 
+
 
 // Protected Route
 const ProtectedRoute = ({ children }) => {
@@ -25,6 +27,12 @@ function App() {
                     <Route path="/services" element={
                         <ProtectedRoute>
                             <Services />
+                        </ProtectedRoute>
+                    } />
+                     {/* Add the Appointments Route */}
+                    <Route path="/appointments" element={
+                        <ProtectedRoute>
+                            <Appointments />
                         </ProtectedRoute>
                     } />
                     

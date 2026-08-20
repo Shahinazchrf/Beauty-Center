@@ -1,24 +1,69 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import axios from 'axios';
 
 const Services = () => {
+    const [menuOpen, setMenuOpen] = useState(false);
+    const [services, setServices] = useState([]); // Fetched from DB
+    const [loadingServices, setLoadingServices] = useState(true);
+    const [loadingId, setLoadingId] = useState(null);
     const navigate = useNavigate();
+    const location = useLocation();
 
-    // Hardcoded data matching your mockup. 
-    // In the future, this will come from your MongoDB database!
-    const services = [
-        { id: 1, title: "Soin visage", duration: "1h", price: "3000 DA", image: "https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?q=80&w=2070&auto=format&fit=crop" },
-        { id: 2, title: "Massage relaxant", duration: "1h30min", price: "4000 DA", image: "https://images.unsplash.com/photo-1544161515-4ab6ce6db874?q=80&w=2070&auto=format&fit=crop" },
-        { id: 3, title: "Coiffure femme", duration: "2h", price: "3000 DA", image: "https://images.unsplash.com/photo-1560066984-138dadb4c035?q=80&w=2070&auto=format&fit=crop" },
-        { id: 4, title: "Coloration cheveux", duration: "3h", price: "6000 DA", image: "https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?q=80&w=2070&auto=format&fit=crop" },
-        { id: 5, title: "Pédicure", duration: "1h", price: "2000 DA", image: "https://images.unsplash.com/photo-1519014816548-bf5fe059eaa2?q=80&w=2070&auto=format&fit=crop" },
-        { id: 6, title: "Épilation", duration: "1h", price: "3000 DA", image: "https://images.unsplash.com/photo-1512290923902-8a9f81dc236c?q=80&w=2070&auto=format&fit=crop" },
-    ];
+    // 1. Fetch REAL services from the database on page load
+    useEffect(() => {
+        const fetchServices = async () => {
+            try {
+                const token = localStorage.getItem('token');
+                const res = await axios.get('http://localhost:5000/api/services', {
+                    headers: { Authorization: `Bearer ${token}` }
+                });
+                setServices(res.data.data);
+            } catch (err) {
+                console.error("Failed to fetch services", err);
+                setServices([]);
+            } finally {
+                setLoadingServices(false);
+            }
+        };
+        fetchServices();
+    }, []);
 
     const handleLogout = () => {
         localStorage.removeItem('token');
         localStorage.removeItem('user');
         navigate('/login');
+    };
+
+    const toggleMenu = () => setMenuOpen(!menuOpen);
+    const isActive = (path) => location.pathname === path;
+
+    // 2. Handle Booking with REAL MongoDB _id
+    const handleBookAppointment = async (service) => {
+        setLoadingId(service._id);
+        try {
+            const token = localStorage.getItem('token');
+            const today = new Date().toISOString().split('T')[0];
+            const startTime = "10:00";
+            const endTime = "11:00";
+
+            await axios.post('http://localhost:5000/api/appointments', {
+                serviceId: service._id,
+                appointmentDate: today,
+                startTime: startTime,
+                endTime: endTime,
+                notes: ""
+            }, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+
+            alert(`✅ ${service.name} booked successfully!`);
+        } catch (error) {
+            console.error("Booking Error:", error.response?.data || error.message);
+            alert('❌ Failed to book appointment. Please try again.');
+        } finally {
+            setLoadingId(null);
+        }
     };
 
     return (
@@ -27,40 +72,99 @@ const Services = () => {
             <nav className="services-navbar">
                 <div className="nav-logo">BeautyBook</div>
                 
-                <div className="nav-links">
-                    <span className="nav-item active">🌸 Beauty treatments</span>
-                    <span className="nav-item">📅 Appointment</span>
-                    <span className="nav-icon">🔔</span>
-                    <span className="nav-icon" onClick={handleLogout} style={{cursor: 'pointer'}}>⚙️</span>
+                {/* Hamburger Menu (Only visible on mobile) */}
+                <div className="hamburger" onClick={toggleMenu}>☰</div>
+
+                {/* Desktop Links (Updated with SVGs) */}
+                <div className="nav-links desktop-nav">
+                    {/* Beauty treatments Link */}
+                    <span className={`nav-item ${isActive('/services') ? 'active' : ''}`}>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{marginRight: '6px'}}>
+                            <path d="M12 2.69l5.19 5.2 7.48-1.65-2.17 8.59 7.41 4.2-5.19 5.2-7.48 1.65-4.2-7.41-7.41-4.2 2.17-8.59L12 2.69z"/>
+                            <path d="M12 22V2"/>
+                        </svg>
+                        Beauty treatments
+                    </span>
+                    
+                    {/* Appointment Link */}
+                    <span className={`nav-item ${isActive('/appointments') ? 'active' : ''}`} onClick={() => navigate('/appointments')}>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{marginRight: '6px'}}>
+                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                            <line x1="16" y1="2" x2="16" y2="6"></line>
+                            <line x1="8" y1="2" x2="8" y2="6"></line>
+                            <line x1="3" y1="10" x2="21" y2="10"></line>
+                            <line x1="12" y1="14" x2="12" y2="18"></line>
+                            <line x1="16" y1="14" x2="16" y2="18"></line>
+                        </svg>
+                        Appointment
+                    </span>
+
+                    {/* Bell Icon */}
+                    <span className="nav-icon">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                            <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                        </svg>
+                    </span>
+
+                    {/* Settings Gear (Logout) */}
+                    <span className="nav-icon" onClick={handleLogout} style={{cursor: 'pointer'}}>
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <circle cx="12" cy="12" r="3"></circle>
+                            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                        </svg>
+                    </span>
                 </div>
             </nav>
+
+            {/* ---------------- MOBILE MENU (Hidden by default) ---------------- */}
+            <div className={`mobile-menu ${menuOpen ? 'open' : ''}`}>
+                <div className="mobile-menu-content">
+                    {/* Mobile active detection */}
+                    <span className={`mobile-nav-item ${isActive('/services') ? 'active' : ''}`}>
+                        🌸 Beauty treatments
+                    </span>
+                    <span 
+                        className={`mobile-nav-item ${isActive('/appointments') ? 'active' : ''}`}
+                        onClick={() => { setMenuOpen(false); navigate('/appointments'); }}
+                    >
+                        📅 Appointment
+                    </span>
+                    <div className="mobile-nav-icons">
+                        <span className="nav-icon">🔔</span>
+                        <span className="nav-icon" onClick={handleLogout} style={{cursor: 'pointer'}}>⚙️</span>
+                    </div>
+                </div>
+            </div>
 
             {/* ---------------- GRID OF SERVICES ---------------- */}
             <div className="services-grid-container">
                 <div className="services-grid">
-                    {services.map((service) => (
-                        <div key={service.id} className="service-card">
-                            <div className="service-image-wrapper">
-                                <img src={service.image} alt={service.title} className="service-image" />
+                    {loadingServices ? (
+                        <div className="loading">Loading services...</div>
+                    ) : services.length === 0 ? (
+                        <div className="empty-services">No services available.</div>
+                    ) : (
+                        services.map((service) => (
+                            <div key={service._id} className="service-card">
+                                <div className="service-image-wrapper">
+                                    <img src={service.image} alt={service.name} className="service-image" />
+                                </div>
+                                <h3 className="service-title">{service.name}</h3>
+                                <div className="service-details">
+                                    <span>Durée: {service.duration} min</span>
+                                    <span>Prix: {service.price} DA</span>
+                                </div>
+                                <button 
+                                    className="service-btn" 
+                                    onClick={() => handleBookAppointment(service)}
+                                    disabled={loadingId === service._id}
+                                >
+                                    {loadingId === service._id ? 'Booking...' : 'Add to appointment'}
+                                </button>
                             </div>
-                            <h3 className="service-title">{service.title}</h3>
-                            <div className="service-details">
-                                <span>Durée: {service.duration}</span>
-                                <span>Prix: {service.price}</span>
-                            </div>
-                            // Inside your Services.jsx, update the button inside the map:
-<button 
-    className="service-btn" 
-    onClick={() => {
-        // This is where you will later send a request to your backend
-        console.log(`Added service: ${service.title}`);
-        alert(`You selected: ${service.title} for ${service.price}`);
-    }}
->
-    Add to appointment
-</button>
-                        </div>
-                    ))}
+                        ))
+                    )}
                 </div>
             </div>
         </div>
