@@ -4,7 +4,8 @@ import { authAPI } from '../services/api';
 
 const Register = () => {
     const [formData, setFormData] = useState({
-        fullName: '',
+        firstName: '',
+        lastName: '',
         username: '',
         email: '',
         password: '',
@@ -37,7 +38,8 @@ const Register = () => {
 
         try {
             const response = await authAPI.register({
-                fullName: formData.fullName,
+                firstName: formData.firstName,
+                lastName: formData.lastName,
                 username: formData.username,
                 email: formData.email,
                 password: formData.password,
@@ -70,10 +72,20 @@ const Register = () => {
                     <form onSubmit={handleSubmit}>
                         <input
                             type="text"
-                            name="fullName"
-                            value={formData.fullName}
+                            name="firstName"
+                            value={formData.firstName}
                             onChange={handleChange}
-                            placeholder="enter your Full Name"
+                            placeholder="enter your First Name"
+                            required
+                            disabled={loading}
+                        />
+
+                        <input
+                            type="text"
+                            name="lastName"
+                            value={formData.lastName}
+                            onChange={handleChange}
+                            placeholder="enter your Last Name"
                             required
                             disabled={loading}
                         />

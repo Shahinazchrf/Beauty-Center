@@ -57,4 +57,48 @@ const getMyAppointments = async (req, res) => {
     }
 };
 
-module.exports = { bookAppointment, getMyAppointments };
+// ✅ Admin function to confirm an appointment
+const confirmAppointment = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const appointment = await Appointment.findByIdAndUpdate(
+            id, 
+            { status: 'Confirmed' }, 
+            { new: true }
+        );
+
+        if (!appointment) {
+            return res.status(404).json({ success: false, message: 'Appointment not found' });
+        }
+
+        res.status(200).json({ success: true, data: appointment, message: 'Appointment confirmed!' });
+    } catch (error) {
+        console.error('❌ Confirm Error:', error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+};
+
+// ✅ NEW: Client function to cancel an appointment
+const cancelAppointment = async (req, res) => {
+    try {
+        const { id } = req.params;
+        
+        // Update the status to "Cancelled"
+        const appointment = await Appointment.findByIdAndUpdate(
+            id, 
+            { status: 'Cancelled' }, 
+            { new: true }
+        );
+
+        if (!appointment) {
+            return res.status(404).json({ success: false, message: 'Appointment not found' });
+        }
+
+        res.status(200).json({ success: true, data: appointment, message: 'Appointment cancelled!' });
+    } catch (error) {
+        console.error('❌ Cancel Error:', error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+};
+
+module.exports = { bookAppointment, getMyAppointments, confirmAppointment, cancelAppointment };

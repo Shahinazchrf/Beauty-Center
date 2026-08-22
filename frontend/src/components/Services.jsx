@@ -4,13 +4,12 @@ import axios from 'axios';
 
 const Services = () => {
     const [menuOpen, setMenuOpen] = useState(false);
-    const [services, setServices] = useState([]); // Fetched from DB
+    const [services, setServices] = useState([]);
     const [loadingServices, setLoadingServices] = useState(true);
     const [loadingId, setLoadingId] = useState(null);
     const navigate = useNavigate();
     const location = useLocation();
 
-    // 1. Fetch REAL services from the database on page load
     useEffect(() => {
         const fetchServices = async () => {
             try {
@@ -38,7 +37,6 @@ const Services = () => {
     const toggleMenu = () => setMenuOpen(!menuOpen);
     const isActive = (path) => location.pathname === path;
 
-    // 2. Handle Booking with REAL MongoDB _id
     const handleBookAppointment = async (service) => {
         setLoadingId(service._id);
         try {
@@ -68,16 +66,12 @@ const Services = () => {
 
     return (
         <div className="services-page">
-            {/* ---------------- NAVBAR ---------------- */}
             <nav className="services-navbar">
                 <div className="nav-logo">BeautyBook</div>
-                
-                {/* Hamburger Menu (Only visible on mobile) */}
                 <div className="hamburger" onClick={toggleMenu}>☰</div>
-
-                {/* Desktop Links (Updated with SVGs) */}
+                
                 <div className="nav-links desktop-nav">
-                    {/* Beauty treatments Link */}
+                    {/* SVG Icon for Beauty treatments */}
                     <span className={`nav-item ${isActive('/services') ? 'active' : ''}`}>
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{marginRight: '6px'}}>
                             <path d="M12 2.69l5.19 5.2 7.48-1.65-2.17 8.59 7.41 4.2-5.19 5.2-7.48 1.65-4.2-7.41-7.41-4.2 2.17-8.59L12 2.69z"/>
@@ -86,7 +80,7 @@ const Services = () => {
                         Beauty treatments
                     </span>
                     
-                    {/* Appointment Link */}
+                    {/* SVG Icon for Appointment */}
                     <span className={`nav-item ${isActive('/appointments') ? 'active' : ''}`} onClick={() => navigate('/appointments')}>
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{marginRight: '6px'}}>
                             <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
@@ -99,7 +93,7 @@ const Services = () => {
                         Appointment
                     </span>
 
-                    {/* Bell Icon */}
+                    {/* Bell Icon SVG */}
                     <span className="nav-icon">
                         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                             <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
@@ -107,7 +101,7 @@ const Services = () => {
                         </svg>
                     </span>
 
-                    {/* Settings Gear (Logout) */}
+                    {/* Settings Gear SVG */}
                     <span className="nav-icon" onClick={handleLogout} style={{cursor: 'pointer'}}>
                         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                             <circle cx="12" cy="12" r="3"></circle>
@@ -117,19 +111,10 @@ const Services = () => {
                 </div>
             </nav>
 
-            {/* ---------------- MOBILE MENU (Hidden by default) ---------------- */}
             <div className={`mobile-menu ${menuOpen ? 'open' : ''}`}>
                 <div className="mobile-menu-content">
-                    {/* Mobile active detection */}
-                    <span className={`mobile-nav-item ${isActive('/services') ? 'active' : ''}`}>
-                        🌸 Beauty treatments
-                    </span>
-                    <span 
-                        className={`mobile-nav-item ${isActive('/appointments') ? 'active' : ''}`}
-                        onClick={() => { setMenuOpen(false); navigate('/appointments'); }}
-                    >
-                        📅 Appointment
-                    </span>
+                    <span className={`mobile-nav-item ${isActive('/services') ? 'active' : ''}`}>🌸 Beauty treatments</span>
+                    <span className={`mobile-nav-item ${isActive('/appointments') ? 'active' : ''}`} onClick={() => { setMenuOpen(false); navigate('/appointments'); }}>📅 Appointment</span>
                     <div className="mobile-nav-icons">
                         <span className="nav-icon">🔔</span>
                         <span className="nav-icon" onClick={handleLogout} style={{cursor: 'pointer'}}>⚙️</span>
@@ -137,7 +122,6 @@ const Services = () => {
                 </div>
             </div>
 
-            {/* ---------------- GRID OF SERVICES ---------------- */}
             <div className="services-grid-container">
                 <div className="services-grid">
                     {loadingServices ? (

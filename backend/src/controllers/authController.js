@@ -1,4 +1,3 @@
-// backend/src/controllers/authController.js
 const User = require('../models/User');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
@@ -16,16 +15,12 @@ const generateToken = (id, role) => {
 // @route POST/api/auth/register
 // @access Public
 const register = async (req, res) => {
-    console.log("📝 REGISTRATION REQUEST:", req.body);
     try {
-        const { fullName, username, email, password, confirmPassword } = req.body;
+        const { firstName, lastName, username, email, password, confirmPassword } = req.body;
 
         // Check if password match
         if (password !== confirmPassword) {
-            return res.status(400).json({
-                success: false,
-                message: 'Passwords do not match'
-            });
+            return res.status(400).json({ success: false, message: 'Passwords do not match' });
         }
 
         // Check if user already exists
@@ -34,25 +29,17 @@ const register = async (req, res) => {
         });
 
         if (userExists) {
-            return res.status(400).json({
-                success: false,
-                message: 'User with this email or username already exists'
-            });
+            return res.status(400).json({ success: false, message: 'User with this email or username already exists' });
         }
 
-        // 🔥 HASH THE PASSWORD HERE (in the controller)
-        const salt = await bcrypt.genSalt(10);
-        const hashedPassword = await bcrypt.hash(password, salt);
-
-        // Create user with hashed password
+        // Create user (Model auto-hashes password)
         const user = await User.create({
-            fullName,
+            firstName: firstName || '',
+            lastName: lastName || '',
             username: username.toLowerCase(),
             email: email.toLowerCase(),
-            password: hashedPassword, // This is already hashed!
+            password: password,
         });
-
-        console.log("✅ User created:", user._id);
 
         // Generate token
         const token = generateToken(user._id, user.role);
@@ -62,7 +49,8 @@ const register = async (req, res) => {
             token,
             user: {
                 id: user._id,
-                fullName: user.fullName,
+                firstName: user.firstName,
+                lastName: user.lastName,
                 username: user.username,
                 email: user.email,
                 role: user.role,
@@ -72,10 +60,7 @@ const register = async (req, res) => {
 
     } catch (error) {
         console.error("❌ REGISTRATION ERROR:", error);
-        res.status(500).json({
-            success: false,
-            message: error.message
-        });
+        res.status(500).json({ success: false, message: error.message });
     }
 };
 
@@ -83,7 +68,6 @@ const register = async (req, res) => {
 // @route POST/api/auth/login
 // @access Public
 const login = async (req, res) => {
-    console.log("📩 LOGIN REQUEST:", req.body);
     try {
         const { identifier, password } = req.body;
         
@@ -96,32 +80,19 @@ const login = async (req, res) => {
         });
 
         if (!user) {
-            return res.status(401).json({
-                success: false,
-                message: 'Invalid credentials'
-            });
+            return res.status(401).json({ success: false, message: 'Invalid credentials' });
         }
 
         // Check if user is active
         if (!user.isActive) {
-            return res.status(403).json({
-                success: false,
-                message: 'Your account has been deactivated. Please contact support'
-            });
+            return res.status(403).json({ success: false, message: 'Your account has been deactivated. Please contact support' });
         }
 
         // Check password
         const isPasswordValid = await user.comparePassword(password);
         if (!isPasswordValid) {
-            return res.status(401).json({
-                success: false,
-                message: 'Invalid credentials'
-            });
+            return res.status(401).json({ success: false, message: 'Invalid credentials' });
         }
-
-        // Update last login
-        user.lastLogin = new Date();
-        await user.save();
 
         // Generate token
         const token = generateToken(user._id, user.role);
@@ -131,7 +102,8 @@ const login = async (req, res) => {
             token,
             user: {
                 id: user._id,
-                fullName: user.fullName,
+                firstName: user.firstName,
+                lastName: user.lastName,
                 username: user.username,
                 email: user.email,
                 role: user.role,
@@ -141,10 +113,7 @@ const login = async (req, res) => {
         });
     } catch (error) {
         console.error("❌ LOGIN ERROR:", error);
-        res.status(500).json({
-            success: false,
-            message: error.message,
-        });
+        res.status(500).json({ success: false, message: error.message });
     }
 };
 
@@ -154,29 +123,13 @@ const login = async (req, res) => {
 const getMe = async (req, res) => {
     try {
         const user = await User.findById(req.userId).select('-password');
-
         if (!user) {
-            return res.status(404).json({
-                success: false,
-                message: 'User not found'
-            });
+            return res.status(404).json({ success: false, message: 'User not found' });
         }
-
-        res.status(200).json({
-            success: true,
-            user
-        });
+        res.status(200).json({ success: true, user });
     } catch (error) {
-        console.error("❌ GETME ERROR:", error);
-        res.status(500).json({
-            success: false,
-            message: error.message
-        });
+        res.status(500).json({ success: false, message: error.message });
     }
 };
 
-module.exports = {
-    register,
-    login,
-    getMe
-};
+module.exports = { register, login, getMe };
