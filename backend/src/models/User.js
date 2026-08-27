@@ -18,12 +18,13 @@ const userSchema = new mongoose.Schema({
     lastLogin: { type: Date }
 }, { timestamps: true });
 
-// ✅ THE FIX: Mongoose 9 does NOT use next()!
+// ✅ Hash password ONLY if modified
 userSchema.pre('save', async function() {
     if (!this.isModified('password')) return;
     try {
         const salt = await bcrypt.genSalt(10);
         this.password = await bcrypt.hash(this.password, salt);
+        console.log('🔑 Password hashed in pre-save hook'); // DEBUG
     } catch (error) {
         throw error;
     }

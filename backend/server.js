@@ -27,7 +27,7 @@ app.use(cors({
   credentials: true
 }));
 
-app.use(express.json());
+app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
 
 // ---------- ROUTES ----------
@@ -50,6 +50,7 @@ app.use((err, req, res, next) => {
   });
 });
 
+app.use('/api/notifications', require('./src/routes/notificationRoutes'));
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {

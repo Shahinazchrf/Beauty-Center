@@ -1,13 +1,12 @@
 const express = require('express');
 const router = express.Router();
-const { register, login, getMe } = require('../controllers/authController');
+const { register, login, getMe, updateProfile, updateProfileImage } = require('../controllers/authController');
 const { authenticate } = require('../middleware/auth');
 
-// Public routes
 router.post('/register', register);
 router.post('/login', login);
-
-// Private routes
 router.get('/me', authenticate, getMe);
+router.put('/update', authenticate, updateProfile);
+router.put('/update-profile-image', authenticate, updateProfileImage);
 
 module.exports = router;

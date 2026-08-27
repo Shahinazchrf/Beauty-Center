@@ -44,12 +44,14 @@ const Register = () => {
                 email: formData.email,
                 password: formData.password,
                 confirmPassword: formData.confirmPassword,
+                // No role sent - defaults to 'client'
             });
 
             const { token, user } = response.data;
             localStorage.setItem('token', token);
             localStorage.setItem('user', JSON.stringify(user));
             
+            // Client always goes to services
             navigate('/services');
         } catch (error) {
             setError(error.response?.data?.message || 'Registration failed. Please try again.');
@@ -60,10 +62,8 @@ const Register = () => {
 
     return (
         <div className="login-wrapper">
-            {/* LEFT SIDE - Golden Box Form */}
             <div className="login-form">
                 <div className="form-content">
-                    
                     <h1>Create Your Account</h1>
                     <h2>BeautyBook</h2>
 
