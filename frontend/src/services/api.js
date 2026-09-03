@@ -1,7 +1,10 @@
 import axios from 'axios';
 
+// Use environment variable for API URL
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+
 const API = axios.create({
-    baseURL: 'http://localhost:5000/api',
+    baseURL: API_URL,
     headers: {
         'Content-Type': 'application/json',
     },
@@ -20,18 +23,18 @@ API.interceptors.request.use(
     (error) => Promise.reject(error)
 );
 
-// Remove or comment out the 401 redirect - we handle it manually
-// API.interceptors.response.use(
-//     (response) => response,
-//     (error) => {
-//         if (error.response?.status === 401) {
-//             localStorage.removeItem('token');
-//             localStorage.removeItem('user');
-//             // DON'T redirect here - let the component handle it
-//         }
-//         return Promise.reject(error);
-//     }
-// );
+// Handle 401 errors
+API.interceptors.response.use(
+    (response) => response,
+    (error) => {
+        if (error.response?.status === 401) {
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            window.location = '/login';
+        }
+        return Promise.reject(error);
+    }
+);
 
 export const authAPI = {
     register: (userData) => API.post('/auth/register', userData),
