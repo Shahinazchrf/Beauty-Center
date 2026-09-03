@@ -3256,3 +3256,276 @@ body {
         justify-content: center;
     }
 }
+/* ============================================
+   ADMIN SETTINGS PAGE
+   ============================================ */
+.admin-settings-page {
+    min-height: 100vh;
+    background: #f5f0e8;
+}
+
+.admin-settings-content {
+    padding: 30px 40px;
+}
+
+.admin-settings-card {
+    background: white;
+    border-radius: 16px;
+    padding: 40px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+/* Profile Section */
+.settings-profile-section {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    padding-bottom: 30px;
+    border-bottom: 1px solid #eee;
+    margin-bottom: 30px;
+}
+
+.settings-profile-avatar {
+    position: relative;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: #f0ede8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.settings-profile-avatar svg {
+    width: 60px;
+    height: 60px;
+    stroke: #cbb26c;
+}
+
+.settings-profile-avatar .profile-image {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.avatar-upload-btn {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    background: #cbb26c;
+    border: 2px solid white;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.avatar-upload-btn:hover {
+    background: #b89f5a;
+}
+
+.avatar-upload-btn svg {
+    stroke: white;
+    width: 14px;
+    height: 14px;
+}
+
+.settings-profile-info h2 {
+    font-family: 'Inter', sans-serif;
+    font-size: 24px;
+    font-weight: 600;
+    color: #333;
+    margin: 0;
+}
+
+.settings-role {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    color: #888;
+    margin: 4px 0;
+}
+
+.settings-email {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    color: #666;
+    margin: 4px 0;
+}
+
+/* Settings Grid */
+.settings-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+}
+
+.settings-grid-btn {
+    background: #f8f5f0;
+    border: none;
+    border-radius: 12px;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: left;
+}
+
+.settings-grid-btn:hover {
+    background: #f0ede8;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+}
+
+.settings-btn-icon {
+    font-size: 24px;
+    flex-shrink: 0;
+}
+
+.settings-btn-label {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    color: #333;
+}
+
+/* Admin Modal */
+.admin-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.admin-modal {
+    background: white;
+    border-radius: 16px;
+    padding: 32px;
+    width: 450px;
+    max-width: 90%;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+}
+
+.admin-modal-title {
+    font-family: 'Inter', sans-serif;
+    font-size: 20px;
+    font-weight: 600;
+    color: #333;
+    margin: 0 0 20px 0;
+}
+
+.admin-modal-label {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    color: #555;
+    display: block;
+    margin-bottom: 8px;
+}
+
+.admin-modal-input {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    margin-bottom: 12px;
+    transition: border-color 0.2s ease;
+}
+
+.admin-modal-input:focus {
+    outline: none;
+    border-color: #cbb26c;
+}
+
+.admin-modal-select {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    margin-bottom: 12px;
+    background: white;
+}
+
+.admin-modal-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+    margin-top: 20px;
+}
+
+.admin-modal-cancel {
+    padding: 10px 24px;
+    border: none;
+    border-radius: 8px;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    color: #666;
+    background: #f0ede8;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.admin-modal-cancel:hover {
+    background: #e5e0d8;
+}
+
+.admin-modal-save {
+    padding: 10px 24px;
+    border: none;
+    border-radius: 8px;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    color: white;
+    background: #cbb26c;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.admin-modal-save:hover {
+    background: #b89f5a;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .admin-settings-content {
+        padding: 20px;
+    }
+    
+    .admin-settings-card {
+        padding: 20px;
+    }
+    
+    .settings-profile-section {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .settings-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .admin-modal {
+        padding: 24px;
+    }
+}

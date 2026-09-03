@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import Login from './components/Login';
 import AdminLogin from './components/AdminLogin';
 import AdminRegister from './components/AdminRegister';
+import AdminSettings from './components/AdminSettings';
 import Register from './components/Register';
 import Services from './components/Services'; 
 import Appointments from './components/Appointments'; 
@@ -44,6 +45,7 @@ function App() {
                     {/* Admin Routes */}
                     <Route path="/admin/dashboard" element={<ProtectedRoute adminOnly={true}><AdminDashboard /></ProtectedRoute>} />
                     <Route path="/admin/appointments" element={<ProtectedRoute adminOnly={true}><AdminAppointments /></ProtectedRoute>} />
+                    <Route path="/admin/settings" element={<ProtectedRoute adminOnly={true}><AdminSettings /></ProtectedRoute>} />
                     
                     <Route path="/" element={<Navigate to="/login" replace />} />
                 </Routes>

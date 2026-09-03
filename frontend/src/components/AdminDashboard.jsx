@@ -84,6 +84,9 @@ const AdminDashboard = () => {
     // State for expanded client info
     const [expandedClientId, setExpandedClientId] = useState(null);
 
+    // ========== isActive FUNCTION - FIXED ==========
+    const isActive = (path) => location.pathname === path;
+
     useEffect(() => {
         const handleClickOutside = (event) => {
             if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -472,7 +475,7 @@ const AdminDashboard = () => {
                             </div>
                         )}
 
-                        {/* CLIENTS TAB - NEW DESIGN */}
+                        {/* CLIENTS TAB */}
                         {activeTab === 'clients' && (
                             <div className="clients-list-container">
                                 {clients.length === 0 ? (

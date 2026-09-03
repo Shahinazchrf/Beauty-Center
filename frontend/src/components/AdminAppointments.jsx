@@ -110,6 +110,9 @@ const AdminAppointments = () => {
                         🚪 Logout
                     </span>
                 </div>
+                <span className={`nav-item ${isActive('/admin/settings') ? 'active' : ''}`} onClick={() => navigate('/admin/settings')}>
+    ⚙️ Settings
+</span>
             </nav>
 
             <div className="admin-content">
