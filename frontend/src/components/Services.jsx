@@ -25,7 +25,7 @@ const Services = () => {
         const fetchServices = async () => {
             try {
                 const token = localStorage.getItem('token');
-                const res = await axios.get('http://localhost:5000/api/services', {
+                const res = await axios.get('https://beauty-center-h667.onrender.com/api/services', {
                     headers: { Authorization: `Bearer ${token}` }
                 });
                 setServices(res.data.data);
@@ -74,7 +74,7 @@ const Services = () => {
             try {
                 const token = localStorage.getItem('token');
                 const res = await axios.get(
-                    `http://localhost:5000/api/appointments/available?serviceId=${selectedService._id}&date=${date}`,
+                    `https://beauty-center-h667.onrender.com/api/appointments/available?serviceId=${selectedService._id}&date=${date}`,
                     { headers: { Authorization: `Bearer ${token}` } }
                 );
                 setAvailableSlots(res.data.availableSlots || []);
@@ -105,7 +105,7 @@ const Services = () => {
             const endHours = hours + 1;
             const endTime = `${String(endHours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
 
-            await axios.post('http://localhost:5000/api/appointments', {
+            await axios.post('https://beauty-center-h667.onrender.com/api/appointments', {
                 serviceId: selectedService._id,
                 appointmentDate: selectedDate,
                 startTime: selectedTime,

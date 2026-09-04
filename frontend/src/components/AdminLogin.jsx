@@ -30,7 +30,7 @@ const AdminLogin = () => {
         console.log('🔐 Admin login attempt:', formData.email);
 
         try {
-            const response = await axios.post('http://localhost:5000/api/auth/login', {
+            const response = await axios.post('https://beauty-center-h667.onrender.com/api/auth/login', {
                 identifier: formData.email,
                 password: formData.password
             });

@@ -42,7 +42,7 @@ const handleSubmit = async (e) => {
     try {
         console.log('Registering admin:', formData.email); // DEBUG
         
-        const response = await axios.post('http://localhost:5000/api/auth/register', {
+        const response = await axios.post('https://beauty-center-h667.onrender.com/api/auth/register', {
             firstName: formData.firstName,
             lastName: formData.lastName,
             username: formData.email.split('@')[0],

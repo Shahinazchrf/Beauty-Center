@@ -21,7 +21,7 @@ const Settings = () => {
         const fetchUser = async () => {
             try {
                 const token = localStorage.getItem('token');
-                const res = await axios.get('http://localhost:5000/api/auth/me', {
+                const res = await axios.get('https://beauty-center-h667.onrender.com/api/auth/me', {
                     headers: { Authorization: `Bearer ${token}` }
                 });
                 setUser(res.data.user);
@@ -64,7 +64,7 @@ const Settings = () => {
                 reader.readAsDataURL(selectedFile);
                 reader.onload = async () => {
                     try {
-                        const res = await axios.put('http://localhost:5000/api/auth/update-profile-image', 
+                        const res = await axios.put('https://beauty-center-h667.onrender.com/api/auth/update-profile-image', 
                             { profileImage: reader.result },
                             { headers: { Authorization: `Bearer ${token}` } }
                         );
@@ -78,7 +78,7 @@ const Settings = () => {
             // 2. DELETE PICTURE
             else if (modalType === 'deletePicture') {
                 try {
-                    const res = await axios.put('http://localhost:5000/api/auth/update-profile-image', 
+                    const res = await axios.put('https://beauty-center-h667.onrender.com/api/auth/update-profile-image', 
                         { profileImage: null },
                         { headers: { Authorization: `Bearer ${token}` } }
                     );
@@ -94,7 +94,7 @@ const Settings = () => {
                 if (formData.newPassword.length < 8) { alert("❌ Password must be at least 8 characters!"); return; }
 
                 try {
-                    await axios.put('http://localhost:5000/api/auth/update', 
+                    await axios.put('https://beauty-center-h667.onrender.com/api/auth/update', 
                         { password: formData.newPassword },
                         { headers: { Authorization: `Bearer ${token}` } }
                     );
@@ -120,7 +120,7 @@ const Settings = () => {
                 }
 
                 try {
-                    const res = await axios.put('http://localhost:5000/api/auth/update', updateData, {
+                    const res = await axios.put('https://beauty-center-h667.onrender.com/api/auth/update', updateData, {
                         headers: { Authorization: `Bearer ${token}` }
                     });
                     setUser(res.data.user);

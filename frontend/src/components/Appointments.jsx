@@ -24,7 +24,7 @@ const Appointments = () => {
         const fetchAppointments = async () => {
             try {
                 const token = localStorage.getItem('token');
-                const res = await axios.get('http://localhost:5000/api/appointments', {
+                const res = await axios.get('https://beauty-center-h667.onrender.com/api/appointments', {
                     headers: { Authorization: `Bearer ${token}` }
                 });
                 setAppointments(res.data.data);
@@ -42,7 +42,7 @@ const Appointments = () => {
         const fetchServices = async () => {
             try {
                 const token = localStorage.getItem('token');
-                const res = await axios.get('http://localhost:5000/api/services', {
+                const res = await axios.get('https://beauty-center-h667.onrender.com/api/services', {
                     headers: { Authorization: `Bearer ${token}` }
                 });
                 setServices(res.data.data);
@@ -58,7 +58,7 @@ const Appointments = () => {
         const fetchNotifications = async () => {
             try {
                 const token = localStorage.getItem('token');
-                const res = await axios.get('http://localhost:5000/api/notifications', {
+                const res = await axios.get('https://beauty-center-h667.onrender.com/api/notifications', {
                     headers: { Authorization: `Bearer ${token}` }
                 });
                 setNotifications(res.data.data);
@@ -86,7 +86,7 @@ const Appointments = () => {
     const handleMarkAsRead = async (id) => {
         try {
             const token = localStorage.getItem('token');
-            await axios.put(`http://localhost:5000/api/notifications/read/${id}`, {}, {
+            await axios.put(`https://beauty-center-h667.onrender.com/api/notifications/read/${id}`, {}, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             
@@ -108,7 +108,7 @@ const Appointments = () => {
     const handleMarkAllAsRead = async () => {
         try {
             const token = localStorage.getItem('token');
-            await axios.put('http://localhost:5000/api/notifications/read-all', {}, {
+            await axios.put('https://beauty-center-h667.onrender.com/api/notifications/read-all', {}, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             
@@ -128,7 +128,7 @@ const Appointments = () => {
         setCancellingId(app._id);
         try {
             const token = localStorage.getItem('token');
-            await axios.put(`http://localhost:5000/api/appointments/cancel/${app._id}`, {}, {
+            await axios.put(`https://beauty-center-h667.onrender.com/api/appointments/cancel/${app._id}`, {}, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             setAppointments(prev => prev.map(item => 

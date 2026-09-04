@@ -24,7 +24,7 @@ export const LanguageProvider = ({ children }) => {
         // Then check user from API
         const token = localStorage.getItem('token');
         if (token) {
-          const res = await axios.get('http://localhost:5000/api/auth/me', {
+          const res = await axios.get('https://beauty-center-h667.onrender.com/api/auth/me', {
             headers: { Authorization: `Bearer ${token}` }
           });
           const userLang = res.data.user?.language;
@@ -53,7 +53,7 @@ export const LanguageProvider = ({ children }) => {
     try {
       const token = localStorage.getItem('token');
       if (token) {
-        await axios.put('http://localhost:5000/api/auth/update', 
+        await axios.put('https://beauty-center-h667.onrender.com/api/auth/update', 
           { language: newLang },
           { headers: { Authorization: `Bearer ${token}` } }
         );

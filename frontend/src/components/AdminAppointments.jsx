@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
-import { useLanguage } from '../context/LanguageContext';
 
 const AdminAppointments = () => {
     const navigate = useNavigate();
     const location = useLocation();
-    const { t } = useLanguage();
     const [appointments, setAppointments] = useState([]);
     const [loading, setLoading] = useState(true);
     const [filter, setFilter] = useState('all');
@@ -28,7 +26,7 @@ const AdminAppointments = () => {
     const fetchAppointments = async () => {
         try {
             const token = localStorage.getItem('token');
-            const res = await axios.get('http://localhost:5000/api/appointments', {
+            const res = await axios.get('https://beauty-center-h667.onrender.com/api/appointments', {
                 headers: { Authorization: `Bearer ${token}` }
             });
             setAppointments(res.data.data || []);
@@ -42,7 +40,7 @@ const AdminAppointments = () => {
     const handleConfirm = async (id) => {
         try {
             const token = localStorage.getItem('token');
-            await axios.put(`http://localhost:5000/api/appointments/confirm/${id}`, {}, {
+            await axios.put(`https://beauty-center-h667.onrender.com/api/appointments/confirm/${id}`, {}, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             alert("✅ Appointment confirmed!");
@@ -57,7 +55,7 @@ const AdminAppointments = () => {
         if (!window.confirm("Are you sure you want to cancel this appointment?")) return;
         try {
             const token = localStorage.getItem('token');
-            await axios.put(`http://localhost:5000/api/appointments/cancel/${id}`, {}, {
+            await axios.put(`https://beauty-center-h667.onrender.com/api/appointments/cancel/${id}`, {}, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             alert("❌ Appointment cancelled.");

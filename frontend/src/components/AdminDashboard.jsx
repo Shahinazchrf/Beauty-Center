@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { useLanguage } from '../context/LanguageContext';
 
 // ---- SVG ICONS ----
 const ListIcon = () => (
@@ -68,8 +67,6 @@ const InfoIcon = () => (
 // ---- MAIN COMPONENT ----
 const AdminDashboard = () => {
     const navigate = useNavigate();
-    const location = useLocation();
-    const { t } = useLanguage();
     const [user, setUser] = useState(null);
     const [appointments, setAppointments] = useState([]);
     const [clients, setClients] = useState([]);
@@ -85,7 +82,6 @@ const AdminDashboard = () => {
     const [expandedClientId, setExpandedClientId] = useState(null);
 
     // ========== isActive FUNCTION - FIXED ==========
-    const isActive = (path) => location.pathname === path;
 
     useEffect(() => {
         const handleClickOutside = (event) => {
@@ -113,7 +109,7 @@ const AdminDashboard = () => {
     const fetchData = async () => {
         try {
             const token = localStorage.getItem('token');
-            const appointmentsRes = await axios.get('http://localhost:5000/api/appointments', {
+            const appointmentsRes = await axios.get('https://beauty-center-h667.onrender.com/api/appointments', {
                 headers: { Authorization: `Bearer ${token}` }
             });
             const allAppointments = appointmentsRes.data.data || [];
@@ -150,7 +146,7 @@ const AdminDashboard = () => {
         try {
             const token = localStorage.getItem('token');
             await axios.put(
-                `http://localhost:5000/api/appointments/confirm/${appointmentId}`,
+                `https://beauty-center-h667.onrender.com/api/appointments/confirm/${appointmentId}`,
                 {},
                 { headers: { Authorization: `Bearer ${token}` } }
             );

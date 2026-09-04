@@ -75,7 +75,7 @@ const UsersIcon = () => (
 const AdminSettings = () => {
     const navigate = useNavigate();
     const location = useLocation();
-    const { t, changeLanguage } = useLanguage();
+    const { changeLanguage } = useLanguage();
     const [user, setUser] = useState(null);
     const [showModal, setShowModal] = useState(false);
     const [modalType, setModalType] = useState('');
@@ -113,7 +113,7 @@ const AdminSettings = () => {
         const fetchUser = async () => {
             try {
                 const token = localStorage.getItem('token');
-                const res = await axios.get('http://localhost:5000/api/auth/me', {
+                const res = await axios.get('https://beauty-center-h667.onrender.com/api/auth/me', {
                     headers: { Authorization: `Bearer ${token}` }
                 });
                 setUser(res.data.user);
@@ -131,7 +131,7 @@ const AdminSettings = () => {
     const fetchAnalyticsData = async () => {
         try {
             const token = localStorage.getItem('token');
-            const appointmentsRes = await axios.get('http://localhost:5000/api/appointments', {
+            const appointmentsRes = await axios.get('https://beauty-center-h667.onrender.com/api/appointments', {
                 headers: { Authorization: `Bearer ${token}` }
             });
             const allAppointments = appointmentsRes.data.data || [];
@@ -244,7 +244,7 @@ const AdminSettings = () => {
                 reader.readAsDataURL(selectedFile);
                 reader.onload = async () => {
                     try {
-                        const res = await axios.put('http://localhost:5000/api/auth/update-profile-image', 
+                        const res = await axios.put('https://beauty-center-h667.onrender.com/api/auth/update-profile-image', 
                             { profileImage: reader.result },
                             { headers: { Authorization: `Bearer ${token}` } }
                         );
@@ -257,7 +257,7 @@ const AdminSettings = () => {
             } 
             else if (modalType === 'deletePicture') {
                 try {
-                    const res = await axios.put('http://localhost:5000/api/auth/update-profile-image', 
+                    const res = await axios.put('https://beauty-center-h667.onrender.com/api/auth/update-profile-image', 
                         { profileImage: null },
                         { headers: { Authorization: `Bearer ${token}` } }
                     );
@@ -272,7 +272,7 @@ const AdminSettings = () => {
                 if (formData.newPassword.length < 8) { alert("❌ Password must be at least 8 characters!"); return; }
 
                 try {
-                    await axios.put('http://localhost:5000/api/auth/update', 
+                    await axios.put('https://beauty-center-h667.onrender.com/api/auth/update', 
                         { password: formData.newPassword },
                         { headers: { Authorization: `Bearer ${token}` } }
                     );
@@ -296,7 +296,7 @@ const AdminSettings = () => {
                 }
 
                 try {
-                    const res = await axios.put('http://localhost:5000/api/auth/update', updateData, {
+                    const res = await axios.put('https://beauty-center-h667.onrender.com/api/auth/update', updateData, {
                         headers: { Authorization: `Bearer ${token}` }
                     });
                     setUser(res.data.user);
