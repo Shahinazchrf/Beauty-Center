@@ -23,10 +23,9 @@ require('./src/models/PasswordReset');
 // ✅ UPDATE CORS - Add your Render URL
 app.use(cors({
   origin: [
-    'http://localhost:3000', 
+    'http://localhost:3000',
     'http://localhost:3001',
-    'https://beautybook-frontend.vercel.app',  // Add your Vercel URL later
-    'https://beauty-center-h567.onrender.com' // Add your Render URL
+    'https://beautybook-frontend-bay.vercel.app'
   ],
   credentials: true
 }));
