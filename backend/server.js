@@ -6,6 +6,11 @@ const connectDB = require('./src/config/database');
 // Load environment variables
 dotenv.config();
 
+// 🔍 ADD THESE TWO LINES FOR DEBUGGING
+console.log('🔑 JWT_SECRET exists:', !!process.env.JWT_SECRET);
+console.log('📦 MONGODB_URI exists:', !!process.env.MONGODB_URI);
+console.log('🔑 JWT_SECRET length:', process.env.JWT_SECRET ? process.env.JWT_SECRET.length : 0);
+
 // Connect to database
 connectDB();
 
